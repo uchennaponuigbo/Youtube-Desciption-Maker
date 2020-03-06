@@ -56,7 +56,7 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 3000;
+            this.timer1.Interval = 2000;
             // 
             // lblCopyNotif
             // 
@@ -79,7 +79,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(120, 20);
             this.dateTimePicker1.TabIndex = 4;
-            this.dateTimePicker1.Value = new System.DateTime(2020, 3, 3, 0, 0, 0, 0);
+            this.dateTimePicker1.Value = new System.DateTime(2020, 3, 5, 23, 24, 16, 0);
             // 
             // richDesc
             // 
@@ -216,22 +216,22 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // importWholeFileToolStripMenuItem
             // 
             this.importWholeFileToolStripMenuItem.Name = "importWholeFileToolStripMenuItem";
-            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.importWholeFileToolStripMenuItem.Text = "Import Whole File...";
+            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.importWholeFileToolStripMenuItem.Text = "Import File to Form...";
             this.importWholeFileToolStripMenuItem.Click += new System.EventHandler(this.importWholeFileToolStripMenuItem_Click);
             // 
             // importTextFromFileToolStripMenuItem
             // 
             this.importTextFromFileToolStripMenuItem.Name = "importTextFromFileToolStripMenuItem";
-            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.importTextFromFileToolStripMenuItem.Text = "Import Text from File...";
+            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.importTextFromFileToolStripMenuItem.Text = "Load Text from File...";
             this.importTextFromFileToolStripMenuItem.Click += new System.EventHandler(this.importTextFromFileToolStripMenuItem_Click);
             // 
             // frmDescriptionMaker

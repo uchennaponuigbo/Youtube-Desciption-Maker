@@ -60,10 +60,15 @@ namespace Youtube_Desciption_Maker
             richDesc.AppendText($"{cboDateAchieved.Text} {dateTimePicker1.Text}{Environment.NewLine}");
         }
 
-        private void btnClearAll_Click(object sender, EventArgs e)
+        private void Clear()
         {
             richDesc.Text = "";
             txtTitle.Text = "";
+        }
+
+        private void btnClearAll_Click(object sender, EventArgs e)
+        {
+            Clear();
         }       
 
         private void btnCopyTitle_Click(object sender, EventArgs e)
@@ -100,8 +105,7 @@ namespace Youtube_Desciption_Maker
         {
             if(importEntire)
             {
-                richDesc.Text = "";
-                txtTitle.Text = "";
+                Clear();
             }
 
             openFileDialog1.DefaultExt = "*.txt";
