@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Youtube_Desciption_Maker
@@ -18,6 +11,7 @@ namespace Youtube_Desciption_Maker
             InitializeComponent();
             lblCopyNotif.Text = "";
             cboDateAchieved.SelectedIndex = 0;
+            dateTimePicker1.Value = DateTime.Now;
         }
 
         private void timer1Tick(object sender, EventArgs e)
