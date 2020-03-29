@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using ExtensionMethods;
 
 namespace Youtube_Desciption_Maker
 {
@@ -9,9 +11,16 @@ namespace Youtube_Desciption_Maker
         public frmDescriptionMaker()
         {
             InitializeComponent();
+
             lblCopyNotif.Text = "";
             cboDateAchieved.SelectedIndex = 0;
             dateTimePicker1.Value = DateTime.Now;
+
+            lblMaxTitleLength.Text = txtTitle.MaxLength.ToString();
+            lblTitleLength.Text = txtTitle.Text.Length.ToString();
+
+            lblMaxDescLength.Text = richDesc.MaxLength.ToString();
+            lblDescLength.Text = richDesc.Text.Length.ToString();
         }
 
         private void timer1Tick(object sender, EventArgs e)
@@ -19,6 +28,43 @@ namespace Youtube_Desciption_Maker
             lblCopyNotif.Text = "";
             timer1.Enabled = false;
             
+        }
+
+        //private void ChangeLabelColor(TextBox text, RichTextBox rich, Label label)
+        //{
+        //    if ((text.Text.Length == text.MaxLength) 
+        //        || (rich.Text.Length == rich.MaxLength))
+        //        label.ForeColor = Color.Red;
+        //    else
+        //        label.ForeColor = Color.Black;
+        //}
+
+        private void UpdateTitleChar()
+        {
+            if (txtTitle.Text.Length > txtTitle.MaxLength)
+                return;
+            lblTitleLength.Text = txtTitle.Text.Length.ToString();
+            if (txtTitle.Text.Length >= txtTitle.MaxLength)
+                lblTitleLength.ForeColor = Color.Red;
+            else
+                lblTitleLength.ForeColor = Color.Black;
+            //ChangeLabelColor(txtTitle, richDesc, lblTitleLength);
+        }
+
+        private void UpdateDescChar()
+        {
+            if (richDesc.Text.Length > richDesc.MaxLength)
+            {
+                lblDescLength.Text = richDesc.Text.Length.ToString();
+                return;
+            }
+                
+            lblDescLength.Text = richDesc.Text.Length.ToString();
+            if (richDesc.Text.Length >= richDesc.MaxLength)
+                lblDescLength.ForeColor = Color.Red;
+            else
+                lblDescLength.ForeColor = Color.Black;
+            //ChangeLabelColor(txtTitle, richDesc, lblDescLength);
         }
 
         private void CopyText(string text)
@@ -42,16 +88,37 @@ namespace Youtube_Desciption_Maker
             CopyText(richDesc.Text);
         }
 
-        
-
         private void btnClear_Click(object sender, EventArgs e)
         {
             richDesc.Text = "";
+        }       
+
+        private string AddandModifyText(string text)
+        {
+            if (richDesc.Text.Length > richDesc.MaxLength)
+                return "";
+            int trunicate = text.Length + richDesc.Text.Length; 
+            if (trunicate > richDesc.MaxLength) 
+            {
+                //trunicate the string so that it'll fit inside the remaining length
+                //ex: 'Uploaded on Mar 28th' goes beyond the maxlength of rich box by a few digits 
+                //subtract the maxlength from the length, then trunicate up to that amount,
+                //return that string.
+                trunicate -= richDesc.MaxLength;
+                trunicate -= text.Length;
+                if (trunicate < 0)
+                    trunicate *= -1;
+                return text.Truncate(trunicate);
+            } 
+            else
+                return text;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            richDesc.AppendText($"{cboDateAchieved.Text} {dateTimePicker1.Text}{Environment.NewLine}");
+            string d = $"{cboDateAchieved.Text} {dateTimePicker1.Text}{Environment.NewLine}";
+            d = AddandModifyText(d);
+            richDesc.AppendText(d);
         }
 
         private void Clear()
@@ -62,7 +129,11 @@ namespace Youtube_Desciption_Maker
 
         private void btnClearAll_Click(object sender, EventArgs e)
         {
-            Clear();
+            DialogResult dialogResult =
+                MessageBox.Show("Empty all text from the textboxes in this form?",
+                "Clear Fields?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+                Clear();
         }       
 
         private void btnCopyTitle_Click(object sender, EventArgs e)
@@ -97,31 +168,46 @@ namespace Youtube_Desciption_Maker
 
         private void ImportintoRichText(bool importEntire)
         {
-            if(importEntire)
+            if(richDesc.Text.Length >= richDesc.MaxLength)
             {
-                Clear();
+                MessageBox.Show($"The description is at the maximum capacity of {richDesc.MaxLength} characters."
+                    , "Going Above Capacity Error");
+                return;
             }
-
-            openFileDialog1.DefaultExt = "*.txt";
-            openFileDialog1.Filter = "Text files (*.txt)|*.txt";
-            string line = "";
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            else
             {
-                using (StreamReader r = new StreamReader(openFileDialog1.FileName))
+                if (importEntire)
                 {
-                    if(importEntire)
-                        txtTitle.Text = r.ReadLine(); //get first line of file onto textbox
-                    while (line != null)
-                    {
-                        line = r.ReadLine();
-                        if (line != null)
-                            richDesc.AppendText(line + Environment.NewLine);
-                    }
-                    r.Close();
+                    Clear();
                 }
-                openFileDialog1.FileName = "";
+
+                openFileDialog1.DefaultExt = "*.txt";
+                openFileDialog1.Filter = "Text files (*.txt)|*.txt";
+                string line = "";
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamReader r = new StreamReader(openFileDialog1.FileName))
+                    {
+                        if (importEntire)
+                            txtTitle.Text = r.ReadLine(); //get first line of file onto textbox
+                        while (line != null)
+                        {
+                            line = r.ReadLine();
+                            if (line != null)
+                                richDesc.AppendText(line + Environment.NewLine);
+                        }                       
+                        if(richDesc.Text.Length > richDesc.MaxLength)
+                        {
+                            int truncate = richDesc.Text.Length - richDesc.MaxLength;
+                            richDesc.Text = richDesc.Text.Truncate(richDesc.Text.Length - truncate);
+                        }
+                        r.Close();
+                    }
+                    openFileDialog1.FileName = "";
+                }
             }
+            
         }
         private void importWholeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -134,6 +220,21 @@ namespace Youtube_Desciption_Maker
         {
             //imports raw text into rich textbox
             ImportintoRichText(false);
+        }
+
+        private void txtTitle_TextChanged(object sender, EventArgs e)
+        {
+            UpdateTitleChar();
+        }
+
+        private void richDesc_TextChanged(object sender, EventArgs e)
+        {
+            UpdateDescChar();
+        }
+
+        private void btnClearTitle_Click(object sender, EventArgs e)
+        {
+            txtTitle.Text = "";
         }
     }
 }
