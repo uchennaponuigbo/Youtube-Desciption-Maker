@@ -59,6 +59,7 @@
             this.btnClearTitle = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnAddTime = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -73,7 +74,7 @@
             // 
             this.lblCopyNotif.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCopyNotif.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.lblCopyNotif.Location = new System.Drawing.Point(471, 81);
+            this.lblCopyNotif.Location = new System.Drawing.Point(470, 39);
             this.lblCopyNotif.Name = "lblCopyNotif";
             this.lblCopyNotif.Size = new System.Drawing.Size(71, 39);
             this.lblCopyNotif.TabIndex = 0;
@@ -151,7 +152,7 @@
             // 
             this.btnClear.Location = new System.Drawing.Point(390, 236);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(77, 23);
+            this.btnClear.Size = new System.Drawing.Size(74, 23);
             this.btnClear.TabIndex = 11;
             this.btnClear.Text = "Clear Desc";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -186,9 +187,9 @@
             // 
             // btnClearAll
             // 
-            this.btnClearAll.Location = new System.Drawing.Point(433, 265);
+            this.btnClearAll.Location = new System.Drawing.Point(424, 265);
             this.btnClearAll.Name = "btnClearAll";
-            this.btnClearAll.Size = new System.Drawing.Size(78, 23);
+            this.btnClearAll.Size = new System.Drawing.Size(92, 23);
             this.btnClearAll.TabIndex = 17;
             this.btnClearAll.Text = "Clear All";
             this.btnClearAll.UseVisualStyleBackColor = true;
@@ -227,22 +228,22 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // importWholeFileToolStripMenuItem
             // 
             this.importWholeFileToolStripMenuItem.Name = "importWholeFileToolStripMenuItem";
-            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.importWholeFileToolStripMenuItem.Text = "Import File to Form...";
+            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.importWholeFileToolStripMenuItem.Text = "Import File into Text Boxes...";
             this.importWholeFileToolStripMenuItem.Click += new System.EventHandler(this.importWholeFileToolStripMenuItem_Click);
             // 
             // importTextFromFileToolStripMenuItem
             // 
             this.importTextFromFileToolStripMenuItem.Name = "importTextFromFileToolStripMenuItem";
-            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.importTextFromFileToolStripMenuItem.Text = "Load Text from File...";
+            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.importTextFromFileToolStripMenuItem.Text = "Load File into Text Box...";
             this.importTextFromFileToolStripMenuItem.Click += new System.EventHandler(this.importTextFromFileToolStripMenuItem_Click);
             // 
             // lblMaxTitleLength
@@ -332,11 +333,22 @@
             this.groupBox3.TabIndex = 28;
             this.groupBox3.TabStop = false;
             // 
+            // btnAddTime
+            // 
+            this.btnAddTime.Location = new System.Drawing.Point(470, 88);
+            this.btnAddTime.Name = "btnAddTime";
+            this.btnAddTime.Size = new System.Drawing.Size(70, 40);
+            this.btnAddTime.TabIndex = 29;
+            this.btnAddTime.Text = "Add Timestamp";
+            this.btnAddTime.UseVisualStyleBackColor = true;
+            this.btnAddTime.Click += new System.EventHandler(this.btnAddTime_Click);
+            // 
             // frmDescriptionMaker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(552, 323);
+            this.Controls.Add(this.btnAddTime);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnClearTitle);
@@ -398,6 +410,7 @@
         private System.Windows.Forms.Button btnClearTitle;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnAddTime;
     }
 }
 

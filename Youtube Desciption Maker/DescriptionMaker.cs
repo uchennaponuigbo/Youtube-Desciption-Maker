@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using ExtensionMethods;
@@ -28,44 +27,7 @@ namespace Youtube_Desciption_Maker
             lblCopyNotif.Text = "";
             timer1.Enabled = false;
             
-        }
-
-        //private void ChangeLabelColor(TextBox text, RichTextBox rich, Label label)
-        //{
-        //    if ((text.Text.Length == text.MaxLength) 
-        //        || (rich.Text.Length == rich.MaxLength))
-        //        label.ForeColor = Color.Red;
-        //    else
-        //        label.ForeColor = Color.Black;
-        //}
-
-        private void UpdateTitleChar()
-        {
-            if (txtTitle.Text.Length > txtTitle.MaxLength)
-                return;
-            lblTitleLength.Text = txtTitle.Text.Length.ToString();
-            if (txtTitle.Text.Length >= txtTitle.MaxLength)
-                lblTitleLength.ForeColor = Color.Red;
-            else
-                lblTitleLength.ForeColor = Color.Black;
-            //ChangeLabelColor(txtTitle, richDesc, lblTitleLength);
-        }
-
-        private void UpdateDescChar()
-        {
-            if (richDesc.Text.Length > richDesc.MaxLength)
-            {
-                lblDescLength.Text = richDesc.Text.Length.ToString();
-                return;
-            }
-                
-            lblDescLength.Text = richDesc.Text.Length.ToString();
-            if (richDesc.Text.Length >= richDesc.MaxLength)
-                lblDescLength.ForeColor = Color.Red;
-            else
-                lblDescLength.ForeColor = Color.Black;
-            //ChangeLabelColor(txtTitle, richDesc, lblDescLength);
-        }
+        }        
 
         private void CopyText(string text)
         {
@@ -114,6 +76,15 @@ namespace Youtube_Desciption_Maker
                 return text;
         }
 
+        private void AdjustWordLength()
+        {
+            if (richDesc.Text.Length > richDesc.MaxLength)
+            {
+                int truncate = richDesc.Text.Length - richDesc.MaxLength;
+                richDesc.Text = richDesc.Text.Truncate(richDesc.Text.Length - truncate);
+            }
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string d = $"{cboDateAchieved.Text} {dateTimePicker1.Text}{Environment.NewLine}";
@@ -148,6 +119,7 @@ namespace Youtube_Desciption_Maker
             //description underneath
             save.Filter = "Text files (*.txt)|*.txt";
             save.Title = "Save as Text File";
+            save.FileName = txtTitle.Text;
 
             if (save.ShowDialog() == DialogResult.OK)
             {
@@ -196,12 +168,8 @@ namespace Youtube_Desciption_Maker
                             line = r.ReadLine();
                             if (line != null)
                                 richDesc.AppendText(line + Environment.NewLine);
-                        }                       
-                        if(richDesc.Text.Length > richDesc.MaxLength)
-                        {
-                            int truncate = richDesc.Text.Length - richDesc.MaxLength;
-                            richDesc.Text = richDesc.Text.Truncate(richDesc.Text.Length - truncate);
                         }
+                        AdjustWordLength();
                         r.Close();
                     }
                     openFileDialog1.FileName = "";
@@ -224,17 +192,33 @@ namespace Youtube_Desciption_Maker
 
         private void txtTitle_TextChanged(object sender, EventArgs e)
         {
-            UpdateTitleChar();
+            //UpdateTitleChar();
+            DisplayWordAmount.UpdateTitleChar(txtTitle, lblTitleLength);
         }
 
         private void richDesc_TextChanged(object sender, EventArgs e)
         {
-            UpdateDescChar();
+            //UpdateDescChar();
+            DisplayWordAmount.UpdateDescChar(richDesc, lblDescLength);
         }
 
         private void btnClearTitle_Click(object sender, EventArgs e)
         {
             txtTitle.Text = "";
+        }
+
+        private void btnAddTime_Click(object sender, EventArgs e)
+        {
+            CreateTimestampForm timestamp = new CreateTimestampForm();
+            DialogResult selectedButton = timestamp.ShowDialog();      
+            if(selectedButton == DialogResult.OK)
+            {
+                foreach (var item in timestamp.TimestampList)
+                {
+                    richDesc.AppendText(item);
+                }
+                AdjustWordLength();
+            }           
         }
     }
 }
