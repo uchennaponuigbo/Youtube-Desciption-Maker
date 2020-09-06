@@ -43,6 +43,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.lblMaxTextLength = new System.Windows.Forms.Label();
             this.btnExitForm = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblTimestampAmount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -66,7 +68,7 @@
             // richSummary
             // 
             this.richSummary.Location = new System.Drawing.Point(12, 79);
-            this.richSummary.MaxLength = 1000;
+            this.richSummary.MaxLength = 1500;
             this.richSummary.Name = "richSummary";
             this.richSummary.Size = new System.Drawing.Size(265, 111);
             this.richSummary.TabIndex = 3;
@@ -76,7 +78,7 @@
             // txtTimeStampTitle
             // 
             this.txtTimeStampTitle.Location = new System.Drawing.Point(73, 35);
-            this.txtTimeStampTitle.MaxLength = 100;
+            this.txtTimeStampTitle.MaxLength = 150;
             this.txtTimeStampTitle.Name = "txtTimeStampTitle";
             this.txtTimeStampTitle.Size = new System.Drawing.Size(207, 20);
             this.txtTimeStampTitle.TabIndex = 4;
@@ -184,11 +186,33 @@
             this.btnExitForm.UseVisualStyleBackColor = true;
             this.btnExitForm.Click += new System.EventHandler(this.btnExitForm_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(165, 62);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(82, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Timestamp no. :";
+            // 
+            // lblTimestampAmount
+            // 
+            this.lblTimestampAmount.AutoSize = true;
+            this.lblTimestampAmount.Location = new System.Drawing.Point(245, 62);
+            this.lblTimestampAmount.Name = "lblTimestampAmount";
+            this.lblTimestampAmount.Size = new System.Drawing.Size(19, 13);
+            this.lblTimestampAmount.TabIndex = 17;
+            this.lblTimestampAmount.Text = "99";
+            // 
             // CreateTimestampForm
             // 
+            this.AcceptButton = this.btnAdd;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnExitForm;
             this.ClientSize = new System.Drawing.Size(292, 242);
+            this.Controls.Add(this.lblTimestampAmount);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnExitForm);
             this.Controls.Add(this.lblMaxTextLength);
             this.Controls.Add(this.label6);
@@ -228,5 +252,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblMaxTextLength;
         private System.Windows.Forms.Button btnExitForm;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblTimestampAmount;
     }
 }

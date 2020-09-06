@@ -23,6 +23,8 @@ namespace Youtube_Desciption_Maker
 
             lblCurrentRichLength.Text = richSummary.TextLength.ToString();
             lblMaxRichLength.Text = richSummary.MaxLength.ToString();
+
+            lblTimestampAmount.Text = TimestampList.Count.ToString();
         }
 
         //https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask?view=netcore-3.1
@@ -32,6 +34,7 @@ namespace Youtube_Desciption_Maker
             if (timestamp.isValidTimestamp)
             {
                 TimestampList.Add(timestamp.ToString());
+                lblTimestampAmount.Text = TimestampList.Count.ToString();
                 //MessageBox.Show(timestamp.ToString());
                 Clear();
             }
