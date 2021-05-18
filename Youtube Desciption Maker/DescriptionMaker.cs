@@ -209,13 +209,13 @@ namespace Youtube_Desciption_Maker
 
         private void btnAddTime_Click(object sender, EventArgs e)
         {
-            CreateTimestampForm timestamp = new CreateTimestampForm();
+            CreateTimestampForm timestamp = new CreateTimestampForm(richDesc.TextLength);
             DialogResult selectedButton = timestamp.ShowDialog();      
             if(selectedButton == DialogResult.OK)
             {
-                foreach (var item in timestamp.TimestampList)
+                foreach (var item in timestamp.TimeStampList)
                 {
-                    richDesc.AppendText(item);
+                    richDesc.AppendText(item.ToString());
                 }
                 AdjustWordLength();
             }           

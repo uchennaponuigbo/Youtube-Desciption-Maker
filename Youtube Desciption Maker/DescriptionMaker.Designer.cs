@@ -163,16 +163,16 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(179, 13);
+            this.label1.Size = new System.Drawing.Size(165, 13);
             this.label1.TabIndex = 12;
-            this.label1.Text = "Enter your description for your video.";
+            this.label1.Text = "Enter a description for your video.";
             // 
             // txtTitle
             // 
-            this.txtTitle.Location = new System.Drawing.Point(76, 48);
+            this.txtTitle.Location = new System.Drawing.Point(46, 48);
             this.txtTitle.MaxLength = 100;
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(308, 20);
+            this.txtTitle.Size = new System.Drawing.Size(338, 20);
             this.txtTitle.TabIndex = 13;
             this.txtTitle.TextChanged += new System.EventHandler(this.txtTitle_TextChanged);
             // 
@@ -181,9 +181,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(13, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 14;
-            this.label2.Text = "Video Title";
+            this.label2.Text = "Title:";
             // 
             // btnClearAll
             // 
@@ -228,22 +228,22 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // importWholeFileToolStripMenuItem
             // 
             this.importWholeFileToolStripMenuItem.Name = "importWholeFileToolStripMenuItem";
-            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
-            this.importWholeFileToolStripMenuItem.Text = "Import File into Text Boxes...";
+            this.importWholeFileToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
+            this.importWholeFileToolStripMenuItem.Text = "Copy Text into Title and Description Boxes...";
             this.importWholeFileToolStripMenuItem.Click += new System.EventHandler(this.importWholeFileToolStripMenuItem_Click);
             // 
             // importTextFromFileToolStripMenuItem
             // 
             this.importTextFromFileToolStripMenuItem.Name = "importTextFromFileToolStripMenuItem";
-            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
-            this.importTextFromFileToolStripMenuItem.Text = "Load File into Text Box...";
+            this.importTextFromFileToolStripMenuItem.Size = new System.Drawing.Size(304, 22);
+            this.importTextFromFileToolStripMenuItem.Text = "Copy Text into Description Box...";
             this.importTextFromFileToolStripMenuItem.Click += new System.EventHandler(this.importTextFromFileToolStripMenuItem_Click);
             // 
             // lblMaxTitleLength
@@ -363,7 +363,9 @@
             this.Controls.Add(this.richDesc);
             this.Controls.Add(this.lblCopyNotif);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "frmDescriptionMaker";
             this.Text = "Description Maker";
             this.groupBox1.ResumeLayout(false);

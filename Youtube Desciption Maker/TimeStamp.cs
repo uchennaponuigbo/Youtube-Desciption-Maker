@@ -4,17 +4,35 @@ namespace Youtube_Desciption_Maker
 {
     public class TimeStamp
     {
-        private string Timestamp {  get; set; }
-        private string Title { get; set; }
-        private string Summary { get; set; }
+        public string Timestamp {  get; }
+        public string Title { get; }
+        public string Summary { get; }
+        /// <summary>
+        /// Returns the total size of the 3 string objects.
+        /// </summary>
+        public int Size { get; }
         public bool isValidTimestamp { get; private set; }
 
-        public TimeStamp(string time, string title, string summary)
+        public bool AllowSpaces { get; }
+
+        public TimeStamp(string time, string title, string summary, bool allowSpaces)
         {
             Timestamp = CheckTimestamp(time);
             ValidateTimestamp();
             Title = title;
             Summary = summary;
+            AllowSpaces = allowSpaces;
+            Size = time.Length + title.Length + summary.Length;
+        }
+
+        public TimeStamp(TimeStamp timestamp)
+        {
+            Timestamp = timestamp.Timestamp;
+            Title = timestamp.Title;
+            Summary = timestamp.Summary;
+            Size = timestamp.Size;
+            isValidTimestamp = timestamp.isValidTimestamp;
+            AllowSpaces = timestamp.AllowSpaces;
         }
 
         private string CheckTimestamp(string time)
@@ -36,7 +54,10 @@ namespace Youtube_Desciption_Maker
 
         public override string ToString()
         {
-            return $"{Timestamp} {Title}\n{Summary}\n\n";
+            if(AllowSpaces)
+                return $"{Timestamp} {Title}\n{Summary}\n\n";
+            else
+                return $"{Timestamp} {Title}\n{Summary}";
         }
     }
 }
