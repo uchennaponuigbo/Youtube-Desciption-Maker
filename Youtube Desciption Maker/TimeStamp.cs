@@ -17,8 +17,9 @@ namespace Youtube_Desciption_Maker
 
         public TimeStamp(string time, string title, string summary, bool allowSpaces)
         {
-            Timestamp = CheckTimestamp(time);
-            ValidateTimestamp();
+            //Timestamp = CheckTimestamp(time);
+            //ValidateTimestamp();
+            Timestamp = time;
             Title = title;
             Summary = summary;
             AllowSpaces = allowSpaces;
@@ -31,7 +32,7 @@ namespace Youtube_Desciption_Maker
             Title = timestamp.Title;
             Summary = timestamp.Summary;
             Size = timestamp.Size;
-            isValidTimestamp = timestamp.isValidTimestamp;
+            //isValidTimestamp = timestamp.isValidTimestamp;
             AllowSpaces = timestamp.AllowSpaces;
         }
 
@@ -45,11 +46,11 @@ namespace Youtube_Desciption_Maker
 
         private void ValidateTimestamp()
         {
-            string pattern = "^[0-5]?[0-9]:[0-5][0-9]$";
-            if (Regex.IsMatch(Timestamp, pattern))
-                isValidTimestamp = true;
-            else
-                isValidTimestamp = false;
+            //string pattern = "^[0-5]?[0-9]:[0-5][0-9]$";
+            //if (Regex.IsMatch(Timestamp, pattern))
+            //    isValidTimestamp = true;
+            //else
+            //    isValidTimestamp = false;
         }
 
         public override string ToString()

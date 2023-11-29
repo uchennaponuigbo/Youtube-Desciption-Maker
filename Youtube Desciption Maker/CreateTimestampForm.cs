@@ -3,198 +3,321 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtensionMethods;
 
 namespace Youtube_Desciption_Maker
 {
+    //Original form size before temp modifying
+    //697, 376
     public partial class CreateTimestampForm : Form
     {
-        public List</*string*/TimeStamp> TimeStampList { get; private set; }
+        //public List</*string*/TimeStamp> TimeStampList { get; private set; }
         /// <summary>
         /// Iterator variable for all the timestamps contained in the list
         /// </summary>
-        //private int index;
+        private uint index;
+        private const string Add = "Add";
+        private const string Edit = "Edit";
 
-        public CreateTimestampForm(int wordCount)
+        private enum IndexListView
+        {
+            Spaces,
+            Index,
+            Time,
+            Title,
+            Summary
+        }
+
+        private int EnumToIntIndex(IndexListView index) => Convert.ToInt32(index);
+
+        public CreateTimestampForm(int wordCount, List<TimeStamp> reserved)
         {
             InitializeComponent();
-            TimeStampList = new List</*string*/TimeStamp>();
+            //TimeStampList = new List</*string*/TimeStamp>();
 
-            lblCurrentTextLength.Text = txtTimeStampTitle.TextLength.ToString();
-            lblMaxTextLength.Text = txtTimeStampTitle.MaxLength.ToString();
+            index = 1;
+            chkSpaces.Checked = true;
+
+            lblCurrentTextLength.Text = txtTitle.TextLength.ToString();
+            lblMaxTextLength.Text = txtTitle.MaxLength.ToString();
 
             lblCurrentRichLength.Text = richSummary.TextLength.ToString();
             lblMaxRichLength.Text = richSummary.MaxLength.ToString();
 
+            lblTimestampSize.Text = lblTotal.Text =
+                lblTimestampAmount.Text = 0.ToString();
+
+            if (reserved.Count > 0)
+            {
+                foreach(TimeStamp item in reserved)
+                {
+                    AddIntoListView(item.Timestamp, item.Title, item.Summary);
+                    lblTimestampSize.Text = item.Size.ToString();
+                    int addition = Convert.ToInt32(lblTotal.Text);
+                    lblTotal.Text = (addition + item.Size).ToString();
+                    AutoScrollListBox();
+                }
+            }
+
+            DisplayTimestampHint(Globals.MaxVideoLength, Color.Gray);
             lblDescriptionSize.Text = wordCount.ToString();
-            lblTimestampSize.Text = 
-                lblTotal.Text = 
-                lblTimestampAmount.Text =
-                0.ToString();
-
-            //index = 0;
-            //btnNext.Enabled = false;
-            //btnPrevious.Enabled = false;
-            maskTimeStamp.Text = " 0:00";
-            chkSpaces.Checked = true;
-
+            
             //345, 306 old form size
         }
 
+        private bool ValidateTimestamp(string text)
+        {
+            //https://regex101.com/
+            //https://www.regextutorial.org/regex-for-numbers-and-ranges.php
+            string pattern = "^(\b([0-9]|1[0-1])\b):?([0-5])?[0-9]:[0-5][0-9]$";
+            return Regex.IsMatch(text, pattern);
+        }
+
+        private void AddIntoListView(string timeStamp, string title, string summary)
+        {
+            //ORDER MATTERS HERE
+            ListViewItem listItem = new ListViewItem();
+            listItem.Checked = chkSpaces.Checked;
+            listItem.SubItems.Add($"{index++}");
+
+            listItem.SubItems.Add(timeStamp);
+
+            listItem.SubItems.Add(title);
+            listItem.SubItems.Add(summary);
+            listViewTimeStamps.Items.Add(listItem);
+
+            lblTimestampAmount.Text = (index - 1).ToString();
+        }
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            richSummary.Focus();
-            
-            TimeStamp timestamp = new TimeStamp(maskTimeStamp.Text, txtTimeStampTitle.Text, 
-                richSummary.Text, chkSpaces.Checked);
-            if (timestamp.isValidTimestamp)
+            if(btnAdd.Text == Add)
             {
-                if(listTimeStamps.SelectedIndex == -1) //if nothing is selected in listbox
-                {
-                    TimeStampList.Add(timestamp/*.ToString()*/);
-                    lblTimestampAmount.Text = TimeStampList.Count.ToString();                     
-                    lblTimestampSize.Text = timestamp.Size.ToString();
-                    int addition = Convert.ToInt32(lblTotal.Text);
-                    lblTotal.Text = (addition + timestamp.Size).ToString();
-                    
-                    listTimeStamps.Items.Add(MarkTimeStampIntoListbox(timestamp));
-                    addition += timestamp.Size;
+                //ORDER MATTERS HERE
+                //ListViewItem listItem = new ListViewItem();
+                //listItem.Checked = chkSpaces.Checked;
+                //listItem.SubItems.Add($"{index++}");
 
-                    int descriptionSize = Convert.ToInt32(lblDescriptionSize.Text);
-                    if (addition + descriptionSize >= 5000)
-                        lblTotal.ForeColor = Color.Red;
-                    else
-                        lblTotal.ForeColor = Color.Black;
-                }
-                else
-                {
-                    chkSpaces.Checked = false;        
-                    string getFirstValue = listTimeStamps.SelectedItem.ToString();
-                    int labelledIndex = Convert.ToInt32(getFirstValue.Truncate(1)); //index labelled in the list
-                    int userIndex = listTimeStamps.SelectedIndex; //selected index the user clicked
+                //listItem.SubItems.Add(txtTimestamp.Text);
 
-                    int newSize = timestamp.Size;
-                    int oldSize = TimeStampList[userIndex].Size;
-                    int total = Convert.ToInt32(lblTotal.Text);
+                //listItem.SubItems.Add(txtTitle.Text);
+                //listItem.SubItems.Add(richSummary.Text);
+                //listViewTimeStamps.Items.Add(listItem);
 
-                    //The idea is to subtract the old size from the total but add new size to total
-                    //it took me two months (on and off, mostly off) to figure out this issue
-                    if (newSize > oldSize)
-                    {
-                        total -= oldSize;
-                        total += newSize;
-                    }                       
-                    else //I don't know exactly why switching the ordering works as intended but... math, I guess
-                    {
-                        total += newSize;
-                        total -= oldSize;
-                    }                        
-                    
-                    lblTotal.Text = total.ToString();
-
-                    int descriptionSize = Convert.ToInt32(lblDescriptionSize.Text);
-                    if (total + descriptionSize >= 5000)
-                        lblTotal.ForeColor = Color.Red;
-                    else
-                        lblTotal.ForeColor = Color.Black;
-
-                    TimeStampList[userIndex] = timestamp;
-
-                    lblTimestampSize.Text = TimeStampList[userIndex].Size.ToString();
-                    listTimeStamps.Items.Insert(userIndex, 
-                        MarkTimeStampIntoListbox(TimeStampList[userIndex], labelledIndex)); //prevents index from being
-                    listTimeStamps.Items.Remove(listTimeStamps.SelectedItem); //labelled incorrectly
-                    listTimeStamps.SelectedIndex = -1;
-                }
-
-                AutoScrollListBox();
+                //lblTimestampAmount.Text = (index - 1).ToString();
+                AddIntoListView(txtTimestamp.Text, txtTitle.Text, richSummary.Text);
+                //GetSizesOfTimestamps();
                 Clear();
+                AutoScrollListBox();
             }
-            else
-                MessageBox.Show("Invalid timestamp!");            
+            else if(btnAdd.Text == Edit)
+            {
+                int selectedIndex = listViewTimeStamps.SelectedIndices[0];
+
+                listViewTimeStamps.Items[selectedIndex].Checked = chkSpaces.Checked;
+
+                listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Time)].Text = txtTimestamp.Text;
+
+                listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Title)].Text = txtTitle.Text;
+
+                listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Summary)].Text = richSummary.Text;
+
+                //get old size and total, subtract the difference, update the total label for processing
+                //in method below
+                int oldSize = Convert.ToInt32(lblTimestampSize.Text);
+                int total = Convert.ToInt32(lblTotal.Text);
+                total -= oldSize;
+
+                lblTotal.Text = total.ToString();
+
+                GetSizesOfTimestamps(true);
+                Clear(true);
+                btnAdd.Text = Add;
+
+                //deselects item
+                listViewTimeStamps.SelectedItems.Clear();
+            }
+        }
+
+        private void GetSizesOfTimestamps(bool adding = true)
+        {
+            int size = txtTitle.TextLength + txtTimestamp.TextLength + richSummary.TextLength;
+            lblTimestampSize.Text = size.ToString();
+
+            if(adding)
+            {
+                int addition = Convert.ToInt32(lblTotal.Text);
+                lblTotal.Text = (addition + size).ToString();
+
+                int descriptionSize = Convert.ToInt32(lblDescriptionSize.Text);
+                if (addition + descriptionSize >= Globals.DescriptionLength)
+                    lblTotal.ForeColor = Color.Red;
+                else
+                    lblTotal.ForeColor = Color.Black;
+            }
         }
        
-        private void Clear()
+        private void Clear(bool clearTime = false)
         {
-            maskTimeStamp.Text = "";
-            txtTimeStampTitle.Text = "";
-            richSummary.Text = "";
+            txtTitle.Text = richSummary.Text = "";
+            if (clearTime)
+            {
+                txtTimestamp.Text = "";
+                DisplayTimestampHint(Globals.MaxVideoLength, Color.Gray);
+            }              
         }
 
+        //finish button
         private void btnExit_Click(object sender, EventArgs e)
         {
-            //finish button
             Close();
-        }
-        //returns the index, the time and the title
-        private string MarkTimeStampIntoListbox(in TimeStamp timestamp, int index = -1)
-        {
-            //not going to add a delete button, so I can simply index the next value
-            //if I ever do add a delete button, I'll remove the index and let the user keep track of
-            //the numerical order of the timestamps
-            if(index == -1)
-                return $"{TimeStampList.Count} | {timestamp.Timestamp} - {timestamp.Title}";
-            else
-                return $"{index} | {timestamp.Timestamp} - {timestamp.Title}";
         }
 
         private void AutoScrollListBox()
         {
-            int nItems = listTimeStamps.Height / listTimeStamps.ItemHeight;
-            listTimeStamps.TopIndex = listTimeStamps.Items.Count - nItems;
+            //int nItems = listTimeStamps.Height / listTimeStamps.ItemHeight;
+            //listTimeStamps.TopIndex = listTimeStamps.Items.Count - nItems;
+
+            listViewTimeStamps.TopItem = listViewTimeStamps.Items[listViewTimeStamps.Items.Count - 1];
         }
 
         private void txtTimeStampTitle_TextChanged(object sender, EventArgs e)
         {
-            DisplayWordAmount.UpdateTitleChar(txtTimeStampTitle, lblCurrentTextLength);
+            DisplayWordAmount.UpdateTitleChar(ref txtTitle, ref lblCurrentTextLength);
         }
 
         private void richSummary_TextChanged(object sender, EventArgs e)
         {
-            DisplayWordAmount.UpdateDescChar(richSummary, lblCurrentRichLength);
+            DisplayWordAmount.UpdateDescChar(ref richSummary, ref lblCurrentRichLength);
         }
 
+        //exit without closing
         private void btnExitForm_Click(object sender, EventArgs e)
-        {
+        { 
             Close();
         }
-     
-        private void FillTextboxes(int i)
-        {   //TODO: why is i -1? Yet, it changes the values without a problem
-            //the problem is that it unselects the index when I edit an index
-            //issue is fixed by simply wrapping a check if the index is -1
-            txtTimeStampTitle.Text = TimeStampList[i].Title;
-            if (TimeStampList[i].Timestamp.Length == 5)
-                maskTimeStamp.Text = TimeStampList[i].Timestamp;
-            else //retains original format of string before it went into the list
-                maskTimeStamp.Text = " " + TimeStampList[i].Timestamp;
-            richSummary.Text = TimeStampList[i].Summary;
-            lblTimestampSize.Text = TimeStampList[i].Size.ToString();
-            chkSpaces.Checked = TimeStampList[i].AllowSpaces;     
-        }
-       
-
+             
         private void lblTimestampAmount_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void listTimeStamps_SelectedIndexChanged(object sender, EventArgs e)
+        private void DisplayTimestampHint(string videoLength, Color color)
         {
-            if(listTimeStamps.SelectedIndex != -1)
-                FillTextboxes(listTimeStamps.SelectedIndex);           
+            txtTimestamp.Text = videoLength;
+            txtTimestamp.ForeColor = color;
         }
 
-        private void listTimeStamps_DoubleClick(object sender, EventArgs e)
+        private void txtTimestamp_Leave(object sender, EventArgs e)
         {
-            if(listTimeStamps.SelectedIndex != -1) //prevents user from double clicking anywhere in listbox
-            {//they must select an index
-                listTimeStamps.SelectedIndex = -1;
-                Clear();
-            }  
+            if (txtTimestamp.Text == "")
+            {
+                DisplayTimestampHint(Globals.MaxVideoLength, Color.Gray);
+            }
+        }
+
+        private void txtTimestamp_Enter(object sender, EventArgs e)
+        {
+            if (txtTimestamp.Text == Globals.MaxVideoLength)
+            {
+                DisplayTimestampHint("", Color.Black);
+            }
+        }
+
+        //
+        private void listViewTimeStamps_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //https://stackoverflow.com/a/42789493/9521550
+            if (listViewTimeStamps.SelectedIndices.Count > 0)
+            {
+                int selectedIndex = listViewTimeStamps.SelectedIndices[0];
+
+                chkSpaces.Checked = listViewTimeStamps.Items[selectedIndex].Checked;
+
+                txtTimestamp.Text = listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Time)].Text;
+
+                txtTitle.Text = listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Title)].Text;
+
+                richSummary.Text = listViewTimeStamps.Items[selectedIndex].
+                    SubItems[EnumToIntIndex(IndexListView.Summary)].Text;
+
+                GetSizesOfTimestamps(false);
+
+                btnAdd.Text = Edit;
+            }
+            else
+            {
+                Clear(true);
+                btnAdd.Text = Add;
+                lblTimestampSize.Text = "0";
+            }
+                
+        }
+
+        public List<TimeStamp> TimeStampList()
+        {
+            List<TimeStamp> list = new List<TimeStamp>(listViewTimeStamps.Items.Count);
+            for (int i = 0; i < listViewTimeStamps.Items.Count; i++)
+            {
+                ListViewItem listview = listViewTimeStamps.Items[i];
+
+                TimeStamp timestamp = new TimeStamp
+                    (listview.SubItems[EnumToIntIndex(IndexListView.Time)].Text, 
+                    listview.SubItems[EnumToIntIndex(IndexListView.Title)].Text,
+                    listview.SubItems[EnumToIntIndex(IndexListView.Summary)].Text, listview.Checked);
+
+                list.Add(timestamp);
+            }
+            return list;
+        }
+
+        //prevents column width resizing
+        private void listViewTimeStamps_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = listViewTimeStamps.Columns[e.ColumnIndex].Width;
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (listViewTimeStamps.SelectedIndices.Count > 0)
+            {
+                int deletedIndex = 0;
+                for(int i = listViewTimeStamps.SelectedItems.Count - 1; i > -1; i--)
+                {
+                    ListViewItem item = listViewTimeStamps.SelectedItems[i];
+                    deletedIndex = item.Index;
+                    listViewTimeStamps.Items[deletedIndex].Remove();
+                    index--;
+                }
+
+                //reorder indices starting from the deleted index
+                for (int j = deletedIndex; j < listViewTimeStamps.Items.Count; j++)
+                {
+                    string text = listViewTimeStamps.Items[j].SubItems
+                        [EnumToIntIndex(IndexListView.Index)].Text;
+                    int itemIndex = Convert.ToInt32(text);
+                    itemIndex--;
+                    listViewTimeStamps.Items[j].SubItems
+                        [EnumToIntIndex(IndexListView.Index)].Text = itemIndex.ToString();
+                }
+            }
+        }
+
+        private void btnSaveForLater_Click(object sender, EventArgs e)
+        {
+            //passes timestamp list into main form and keeps it in memory until
+            //user presses "add timestamp" again
+            Close();
         }
     }
 }

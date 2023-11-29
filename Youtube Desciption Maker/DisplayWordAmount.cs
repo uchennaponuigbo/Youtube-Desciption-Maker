@@ -5,7 +5,7 @@ namespace Youtube_Desciption_Maker
 {
     public static class DisplayWordAmount
     {
-        public static void UpdateDescChar(in RichTextBox richTextBox, in Label richLabelTextLength)
+        public static void UpdateDescChar(ref RichTextBox richTextBox, ref Label richLabelTextLength)
         {
             if (richTextBox.Text.Length > richTextBox.MaxLength)
             {
@@ -21,7 +21,7 @@ namespace Youtube_Desciption_Maker
         }
 
         
-        public static void UpdateTitleChar(in TextBox textBox, in Label labelTextLength)
+        public static void UpdateTitleChar(ref TextBox textBox, ref Label labelTextLength)
         {
             if (textBox.Text.Length > textBox.MaxLength)
                 return;

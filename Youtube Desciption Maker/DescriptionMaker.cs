@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ExtensionMethods;
 
 namespace Youtube_Desciption_Maker
 {
     public partial class frmDescriptionMaker : Form
     {
+        private List<TimeStamp> reservedTimeStamps = null;
+        //754, 445
         public frmDescriptionMaker()
         {
             InitializeComponent();
@@ -20,6 +23,8 @@ namespace Youtube_Desciption_Maker
 
             lblMaxDescLength.Text = richDesc.MaxLength.ToString();
             lblDescLength.Text = richDesc.Text.Length.ToString();
+
+            reservedTimeStamps = new List<TimeStamp>();
         }
 
         private void timer1Tick(object sender, EventArgs e)
@@ -68,8 +73,7 @@ namespace Youtube_Desciption_Maker
                 //return that string.
                 trunicate -= richDesc.MaxLength;
                 trunicate -= text.Length;
-                if (trunicate < 0)
-                    trunicate *= -1;
+                trunicate = Math.Abs(trunicate);
                 return text.Truncate(trunicate);
             } 
             else
@@ -92,12 +96,8 @@ namespace Youtube_Desciption_Maker
             richDesc.AppendText(d);
         }
 
-        private void Clear()
-        {
-            richDesc.Text = "";
-            txtTitle.Text = "";
-        }
-
+        private void Clear() => richDesc.Text = txtTitle.Text = "";
+        
         private void btnClearAll_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult =
@@ -128,8 +128,8 @@ namespace Youtube_Desciption_Maker
                     using (StreamWriter st = new StreamWriter(S))
                     {
                         st.WriteLine(txtTitle.Text); 
-                        foreach (var aa in richDesc.Lines)
-                            st.WriteLine(aa);
+                        foreach (string line in richDesc.Lines)
+                            st.WriteLine(line);
                         st.Close();
                     }
                     S.Close();
@@ -193,13 +193,13 @@ namespace Youtube_Desciption_Maker
         private void txtTitle_TextChanged(object sender, EventArgs e)
         {
             //UpdateTitleChar();
-            DisplayWordAmount.UpdateTitleChar(txtTitle, lblTitleLength);
+            DisplayWordAmount.UpdateTitleChar(ref txtTitle, ref lblTitleLength);
         }
 
         private void richDesc_TextChanged(object sender, EventArgs e)
         {
             //UpdateDescChar();
-            DisplayWordAmount.UpdateDescChar(richDesc, lblDescLength);
+            DisplayWordAmount.UpdateDescChar(ref richDesc, ref lblDescLength);
         }
 
         private void btnClearTitle_Click(object sender, EventArgs e)
@@ -209,16 +209,35 @@ namespace Youtube_Desciption_Maker
 
         private void btnAddTime_Click(object sender, EventArgs e)
         {
-            CreateTimestampForm timestamp = new CreateTimestampForm(richDesc.TextLength);
-            DialogResult selectedButton = timestamp.ShowDialog();      
-            if(selectedButton == DialogResult.OK)
+            CreateTimestampForm timestamp = new CreateTimestampForm(richDesc.TextLength, reservedTimeStamps);
+            DialogResult selectedButton = timestamp.ShowDialog();
+            if (selectedButton == DialogResult.OK)
             {
-                foreach (var item in timestamp.TimeStampList)
+                List<TimeStamp> temp = timestamp.TimeStampList();
+                foreach (var item in temp)
                 {
                     richDesc.AppendText(item.ToString());
                 }
                 AdjustWordLength();
+            }
+            else if (selectedButton == DialogResult.Cancel)
+                btnClearSavedTimes.PerformClick();
+            else if (selectedButton == DialogResult.Ignore)
+            {
+                //save timestamp list for editting the next time the user presses this button
+                reservedTimeStamps = timestamp.TimeStampList();
+                if (reservedTimeStamps.Count == 0)
+                    return;
+                btnClearSavedTimes.Enabled = true;
+                btnAddTime.Text = "Continue Timestamps";
             }           
+        }
+
+        private void btnClearSavedTimes_Click(object sender, EventArgs e)
+        {
+            reservedTimeStamps.Clear();
+            btnClearSavedTimes.Enabled = false;
+            btnAddTime.Text = "Add Timestamps";
         }
     }
 }
