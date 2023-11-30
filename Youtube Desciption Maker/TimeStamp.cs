@@ -11,7 +11,7 @@ namespace Youtube_Desciption_Maker
         /// Returns the total size of the 3 string objects.
         /// </summary>
         public int Size { get; }
-        public bool isValidTimestamp { get; private set; }
+        //public bool isValidTimestamp { get; private set; }
 
         public bool AllowSpaces { get; }
 
@@ -36,22 +36,22 @@ namespace Youtube_Desciption_Maker
             AllowSpaces = timestamp.AllowSpaces;
         }
 
-        private string CheckTimestamp(string time)
-        {
-            if (time[0] == ' ' || time[0] == '0')
-                return time.Substring(1);
-            else
-                return time;
-        }
+        //private string CheckTimestamp(string time)
+        //{
+        //    if (time[0] == ' ' || time[0] == '0')
+        //        return time.Substring(1);
+        //    else
+        //        return time;
+        //}
 
-        private void ValidateTimestamp()
-        {
-            //string pattern = "^[0-5]?[0-9]:[0-5][0-9]$";
-            //if (Regex.IsMatch(Timestamp, pattern))
-            //    isValidTimestamp = true;
-            //else
-            //    isValidTimestamp = false;
-        }
+        //private void ValidateTimestamp()
+        //{
+        //    //string pattern = "^[0-5]?[0-9]:[0-5][0-9]$";
+        //    //if (Regex.IsMatch(Timestamp, pattern))
+        //    //    isValidTimestamp = true;
+        //    //else
+        //    //    isValidTimestamp = false;
+        //}
 
         public override string ToString()
         {

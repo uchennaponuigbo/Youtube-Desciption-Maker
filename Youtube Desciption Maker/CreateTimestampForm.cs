@@ -319,5 +319,20 @@ namespace Youtube_Desciption_Maker
             //user presses "add timestamp" again
             Close();
         }
+
+        private void btnSaveTemplate_Click(object sender, EventArgs e)
+        {
+            //database
+            //name of template
+            //number of timestamps to populate
+                //if 10, then timestamps would be 1:00, 2:00... 10:00
+            //default text to edit/replace
+            //all as one record
+        }
+
+        private void btnLoadTemplate_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

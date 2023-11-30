@@ -60,9 +60,9 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtTimestamp = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnSaveTemplate = new System.Windows.Forms.Button();
+            this.btnAddTemplate = new System.Windows.Forms.Button();
             this.btnSaveForLater = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLoadTemplate = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -302,12 +302,12 @@
             // lblTimestampAmount
             // 
             this.lblTimestampAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTimestampAmount.Location = new System.Drawing.Point(383, 73);
+            this.lblTimestampAmount.Location = new System.Drawing.Point(377, 73);
             this.lblTimestampAmount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTimestampAmount.Name = "lblTimestampAmount";
-            this.lblTimestampAmount.Size = new System.Drawing.Size(24, 18);
+            this.lblTimestampAmount.Size = new System.Drawing.Size(42, 18);
             this.lblTimestampAmount.TabIndex = 25;
-            this.lblTimestampAmount.Text = "99";
+            this.lblTimestampAmount.Text = "999";
             this.lblTimestampAmount.TextChanged += new System.EventHandler(this.lblTimestampAmount_TextChanged);
             // 
             // chkSpaces
@@ -411,15 +411,17 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // btnSaveTemplate
+            // btnAddTemplate
             // 
-            this.btnSaveTemplate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveTemplate.Location = new System.Drawing.Point(660, 307);
-            this.btnSaveTemplate.Name = "btnSaveTemplate";
-            this.btnSaveTemplate.Size = new System.Drawing.Size(100, 52);
-            this.btnSaveTemplate.TabIndex = 38;
-            this.btnSaveTemplate.Text = "Save as Template";
-            this.btnSaveTemplate.UseVisualStyleBackColor = true;
+            this.btnAddTemplate.Enabled = false;
+            this.btnAddTemplate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddTemplate.Location = new System.Drawing.Point(660, 307);
+            this.btnAddTemplate.Name = "btnAddTemplate";
+            this.btnAddTemplate.Size = new System.Drawing.Size(100, 52);
+            this.btnAddTemplate.TabIndex = 38;
+            this.btnAddTemplate.Text = "Create New Template";
+            this.btnAddTemplate.UseVisualStyleBackColor = true;
+            this.btnAddTemplate.Click += new System.EventHandler(this.btnSaveTemplate_Click);
             // 
             // btnSaveForLater
             // 
@@ -433,15 +435,17 @@
             this.btnSaveForLater.UseVisualStyleBackColor = true;
             this.btnSaveForLater.Click += new System.EventHandler(this.btnSaveForLater_Click);
             // 
-            // button1
+            // btnLoadTemplate
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(775, 307);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 52);
-            this.button1.TabIndex = 40;
-            this.button1.Text = "Load Template";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnLoadTemplate.Enabled = false;
+            this.btnLoadTemplate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoadTemplate.Location = new System.Drawing.Point(775, 307);
+            this.btnLoadTemplate.Name = "btnLoadTemplate";
+            this.btnLoadTemplate.Size = new System.Drawing.Size(100, 52);
+            this.btnLoadTemplate.TabIndex = 40;
+            this.btnLoadTemplate.Text = "Load Template";
+            this.btnLoadTemplate.UseVisualStyleBackColor = true;
+            this.btnLoadTemplate.Click += new System.EventHandler(this.btnLoadTemplate_Click);
             // 
             // CreateTimestampForm
             // 
@@ -450,9 +454,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExitForm;
             this.ClientSize = new System.Drawing.Size(1134, 381);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnLoadTemplate);
             this.Controls.Add(this.btnSaveForLater);
-            this.Controls.Add(this.btnSaveTemplate);
+            this.Controls.Add(this.btnAddTemplate);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.txtTimestamp);
             this.Controls.Add(this.groupBox2);
@@ -521,8 +525,8 @@
         private System.Windows.Forms.TextBox txtTimestamp;
         private System.Windows.Forms.ColumnHeader columnSpaces;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnSaveTemplate;
+        private System.Windows.Forms.Button btnAddTemplate;
         private System.Windows.Forms.Button btnSaveForLater;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLoadTemplate;
     }
 }
